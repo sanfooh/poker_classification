@@ -61,7 +61,7 @@ def create_dataset(src_folder):
     print(np.array(train_x).shape,np.array(train_y).shape,np.array(validate_x).shape,np.array(validate_y).shape)          
     return (np.array(train_x),np.array(train_y)),(np.array(validate_x),np.array(validate_y))
 
-create_pic('download_pic','data',10000,10)
+create_pic('download_pic','data',1000,10)
 print('create_pic')
 #create_dataset('data')
 
@@ -106,9 +106,6 @@ model = Model(inputs=base_model.input, outputs=add_model(base_model.output))
 model.compile(loss='binary_crossentropy', optimizer=optimizers.SGD(lr=1e-4, momentum=0.9),
               metrics=['accuracy'])
 
-#model.summary()
-#plot_model(model, to_file='model_plot.png', show_shapes=True, show_layer_names=True)
-
 
 print(X_train.shape,Y_train.shape, X_valid.shape, Y_valid.shape )
 
@@ -120,4 +117,14 @@ model.fit(X_train, Y_train,
             shuffle=True,
             verbose=1,
             validation_data=(X_valid, Y_valid))
-model.save('model4.h5') 
+model.save('model.h5') 
+
+
+#test
+model1=load_model('model.h5')
+img=cv2.imread('download_pic/20.jpg')
+img=cv2.resize(img,(224,224))
+
+predict= model1.predict(img[np.newaxis,:,:,:])
+print(np.argmax(predict))
+
